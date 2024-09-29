@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("https://merlin-server-tk9w.onrender.com");
+const url = "https://merlin-server-tk9w.onrender.com";
+// const url = "http://localhost:8080";
+const socket = io(url);
 
 const App = () => {
   const [msg, setmsg] = useState("");
