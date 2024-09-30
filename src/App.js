@@ -1,23 +1,43 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-
+import Swal from "sweetalert2";
 const url = "https://merlin-server-tk9w.onrender.com";
 // const url = "http://localhost:8080";
 const socket = io(url);
 
 const App = () => {
-  const [msg, setmsg] = useState("");
+  const [msg, setmsg] = useState([]);
+  const [nick, setNick] = useState("");
   const [msglist, setmsglist] = useState([]);
   const sendmsg = () => {
     if (msg.trim() !== "") {
-      socket.emit("msg", msg);
+      socket.emit("msg", { msg, nick });
       setmsg("");
     } else {
       alert("빈칸은 싫어욧");
     }
   };
-
+  const test = async () => {
+    const { value } = await Swal.fire({
+      title: "닉네임입력",
+      icon: "warning",
+      input: "text",
+      confirmButtonText: "확인",
+      allowOutsideClick: false,
+      preConfirm: (value) => {
+        if (value.trim() == "") {
+          Swal.showValidationMessage("어허");
+          return false;
+        }
+        return value;
+      },
+    });
+    if (value) {
+      setNick(value);
+    }
+  };
   useEffect(() => {
+    test();
     socket.on("msg", (newmsg) => {
       setmsglist((prevmsg) => [...prevmsg, newmsg]);
     });
@@ -50,12 +70,13 @@ const App = () => {
         <button type="submit">메세지보내기</button>
       </form>
 
-      <h1>몇 분 지나면 메세지 날아가요</h1>
-      <h1>이쁜 말만 씁시다</h1>
+      <h1 className="공지">몇 분 지나면 메세지 날아가요</h1>
       <ul>
         <li>안녕하세요~</li>
         {msglist.map((msg, index) => (
-          <li key={index}>{msg}</li>
+          <li key={index}>
+            {msg.nick}:{msg.msg}
+          </li>
         ))}
       </ul>
     </>
