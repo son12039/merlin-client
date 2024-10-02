@@ -4,8 +4,8 @@ import Chat from "./components/Chat.js";
 import NickInput from "./components/NickInput.js";
 import { Start } from "./pages/Start.js";
 
-// const url = "https://merlin-server-tk9w.onrender.com";
-const url = "http://localhost:8080";
+ const url = "https://merlin-server-tk9w.onrender.com";
+//const url = "http://localhost:8080";
 const App = () => {
   const [socket, setSocket] = useState(null);
   const [nick, setNick] = useState("");
